@@ -1,6 +1,7 @@
-package Modelo;
+package Controlador;
 
 import ConexionSQL.ConexionMySQL;
+import Modelo.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +13,6 @@ public class UsuarioDAO {
     private String nombre;
     private String correo;
     private String contrasena;
-
-    public UsuarioDAO() {
-
-    }
 
     public void crearUsuario(Usuario usuario) {
         String sql = "INSERT INTO usuarios (nombre, correo, contrasena) VALUES (?, ?, ?)";
@@ -48,4 +45,5 @@ public class UsuarioDAO {
         }
         return usuario;
     }
+
 }

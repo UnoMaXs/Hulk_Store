@@ -1,22 +1,28 @@
 package Vista;
 
+import Controlador.ProductoController;
+import Controlador.UsuarioDAO;
+import Modelo.Carrito;
 import Modelo.Usuario;
-import Modelo.UsuarioDAO;
 
 import java.util.Scanner;
 
 public class InicioSesion {
 
-    private Scanner scanner;
-    private UsuarioDAO usuarioDAO;
+    private final Scanner scanner;
+    private final UsuarioDAO usuarioDAO;
+    private final ProductoController productoController;
+    private final Carrito carrito;
 
     public InicioSesion() {
         scanner = new Scanner(System.in);
         usuarioDAO = new UsuarioDAO();
+        productoController = new ProductoController();
+        carrito = new Carrito();
     }
 
     public void iniciarSesion() {
-        System.out.println("Inicio de Sesión en Hulk Store");
+        System.out.println("\nInicio de Sesión en Hulk Store");
         System.out.print("Correo electrónico: ");
         String correo = scanner.nextLine();
 
@@ -25,22 +31,26 @@ public class InicioSesion {
 
         // Realizar la autenticación del usuario
         if (autenticarUsuario(correo, contrasena)) {
-            System.out.println("¡Inicio de sesión exitoso!");
+            System.out.println("\n¡Inicio de sesión exitoso!");
+            mostrarMenuSecundario();
         } else {
-            System.out.println("Error en las credenciales. Vuelve a intentarlo.");
+            System.out.println("\nError: Credenciales no válidas. Vuelve a intentarlo.");
         }
     }
 
     private boolean autenticarUsuario(String correo, String contrasena) {
-        // Aquí debes implementar la lógica de autenticación
-        // Puedes consultar la base de datos y comparar las credenciales con los registros de usuarios
-        // Ejemplo simplificado:
         Usuario usuario = usuarioDAO.obtenerUsuarioPorCorreo(correo);
-
-        if (usuario != null && usuario.getContrasena().equals(contrasena)) {
-            return true;
-        }
-        return false;
+        return usuario != null && usuario.getContrasena().equals(contrasena);
     }
 
+    private void mostrarMenuSecundario() {
+        MenuSecundario menuSecundario = new MenuSecundario(scanner,carrito);
+        menuSecundario.mostrarMenu();
+    }
+
+
+    // Método para cerrar el Scanner
+    public void cerrarScanner() {
+        scanner.close();
+    }
 }

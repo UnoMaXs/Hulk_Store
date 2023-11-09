@@ -1,7 +1,6 @@
-package Vista;
+package Controlador;
 
 import Modelo.Usuario;
-import Modelo.UsuarioDAO;
 
 import java.util.Scanner;
 
