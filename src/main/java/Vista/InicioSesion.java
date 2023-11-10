@@ -44,10 +44,9 @@ public class InicioSesion {
     }
 
     private void mostrarMenuSecundario() {
-        MenuSecundario menuSecundario = new MenuSecundario(scanner,carrito);
+        MenuSecundario menuSecundario = new MenuSecundario(scanner, carrito);
         menuSecundario.mostrarMenu();
     }
-
 
     // Método para cerrar el Scanner
     public void cerrarScanner() {

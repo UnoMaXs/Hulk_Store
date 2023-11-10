@@ -64,65 +64,46 @@ public class ProductoController {
         }
     }
 
-    /*public static void mostrarProductosDisponibles(){
-        List<Producto> productos= obtenerTodosLosProductos();
-
-        if (productos.isEmpty()){
-            System.out.println("No Hay productos disponibles");
-        } else {
-            System.out.println("-----PRODUCTOS DISPONIBLES-----");
-            for (Producto producto : productos){
-                System.out.println(producto.getNombre()+" - "+producto.getPrecio()+" - "+producto.getCantidad());
-            }
-        }
-    }*/
-
-    /*private static List<Producto> obtenerTodosLosProductos() {
-        List<Producto> productos= new ArrayList<>();
-
-        String sql = "SELECT * FROM productos";
-        try(Connection conn = ConexionMySQL.obtenerConexion()) {
-            PreparedStatement statement = conn.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();{
-                while (resultSet.next()) {
-                    String nombre = resultSet.getString("nombre");
-                    String descripcion = resultSet.getString("descripcion");
-                    double precio = resultSet.getDouble("precio");
-                    int cantidad = resultSet.getInt("cantidad");
-
-                    Producto producto = new Producto(nombre, descripcion, precio, cantidad);
-                    productos.add(producto);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return productos;
-    }*/
-
     public static List<Producto> obtenerProductosDisponibles() {
         List<Producto> productos = new ArrayList<>();
 
-        String sql = "SELECT * FROM productos WHERE cantidad > 0"; // Supongo que la columna cantidad indica la disponibilidad
+        String sql = "SELECT * FROM productos WHERE cantidad > 0";
 
         try (Connection conn = ConexionMySQL.obtenerConexion();
              PreparedStatement statement = conn.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
+                int id = resultSet.getInt("id");
                 String nombre = resultSet.getString("nombre");
                 String descripcion = resultSet.getString("descripcion");
                 double precio = resultSet.getDouble("precio");
                 int cantidad = resultSet.getInt("cantidad");
 
-                Producto producto = new Producto(nombre, descripcion, precio, cantidad);
+                Producto producto = new Producto(id,nombre, descripcion, precio, cantidad);
                 productos.add(producto);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return productos;
     }
+
+    public static void actualizarCantidadDisponible(Producto producto, int cantidad) {
+        // Conexión a la base de datos (debes tener una clase para obtener la conexión)
+        try (Connection conn = ConexionMySQL.obtenerConexion()) {
+            String sql = "UPDATE productos SET cantidad = cantidad - ? WHERE id = ?"; // Asumiendo que tienes una columna 'id' como identificador único.
+
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
+                statement.setInt(1, cantidad); // Cantidad a restar
+                statement.setInt(2, producto.getId()); // ID del producto a actualizar
+
+                statement.executeUpdate(); // Ejecutar la actualización en la base de datos
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 

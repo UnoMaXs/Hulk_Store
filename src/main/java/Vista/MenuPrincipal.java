@@ -4,16 +4,14 @@ import Controlador.RegistroUsuario;
 
 import java.util.Scanner;
 
-
 public class MenuPrincipal {
     public static void main(String[] args) {
-
         Scanner teclado = new Scanner(System.in);
 
         System.out.println("--- HULK STORE ---");
-        System.out.println("1. Iniciar sesion");
+        System.out.println("1. Iniciar sesión");
         System.out.println("2. Registrar usuario");
-        System.out.print("Seleccione una opcion: ");
+        System.out.print("Seleccione una opción: ");
         int opcion = teclado.nextInt();
 
         switch (opcion) {
